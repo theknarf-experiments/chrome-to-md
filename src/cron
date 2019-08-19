@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+FILENAME=`date +"%Y-%m-%d_%H-%M-%S-Chrometabs.md"`
+NEWPATH="$HOME/Dropbox/txt-chrome/"
+FULLPATH="$NEWPATH$FILENAME"
+
+mkdir -p "$NEWPATH"
+chrome-to-md > $FULLPATH
+echo "File written: $FULLPATH"
