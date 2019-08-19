@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+if [ $1 = "--setup" ]; then
+	mkdir -p ~/bin
+	ln -s "$(pwd)/chrome-to-md" ~/bin/chrome-to-md
+fi

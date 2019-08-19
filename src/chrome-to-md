@@ -1,0 +1,24 @@
+#!/usr/bin/ruby -w
+# Based on: https://gist.github.com/marcusps/a7bf99c699327aa25154
+require 'date'
+require 'cgi'
+
+# Run some AppleScript to fetch open tabs from Chrome
+input = %x{osascript -e 'tell application \"Google Chrome\"' -e 'set tabList to every tab of window 1' -e 'set urlList to \"\"' -e 'repeat with aTab in tabList' -e 'set aLink to URL of aTab' -e 'set aTitle to Title of aTab' -e 'set urlList to urlList & aLink & \"$\" & aTitle & ASCII character 10' -e 'end repeat' -e 'return urlList' -e 'end tell' 2> /dev/null }.chomp
+
+d = DateTime.now.strftime("%a %b %d %Y")
+puts "\# Chrome tabs for #{d}"
+
+# Format it into markdown
+input.split("\n").each do |line|
+  url, *title = *line.split('$')
+  title = title.join('$')
+  title = url if title == ""
+  # If url is suspended using The Great Suspender
+  if url.start_with?("chrome-extension://klbibkeccnjlkjkiokjodocebajanakg")
+    url_parsed = CGI::parse(url)
+	 url = url_parsed['uri'][0]
+  end
+  puts "[#{title}](#{url})"
+  puts "\n\n\n"
+end
